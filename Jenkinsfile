@@ -40,9 +40,9 @@ pipeline {
                             reuseNode true
                         }
                     }
-                    steps(
+                    steps{
                         sh 'npx playwright test'
-                    )
+                    }
                 }
             }
         }
