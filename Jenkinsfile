@@ -33,6 +33,17 @@ pipeline {
                         sh 'npx vitest run --reporter=verbose'
                     }
                 }
+                stage('e2e - local') {
+                    agent {
+                        docker {
+                            image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        sh 'npx playwright test'
+                    }
+                }
             }
         }
 
@@ -48,19 +59,19 @@ pipeline {
             }
         }
 
-        stage('e2e tests') {
-                    agent {
-                        docker {
-                            image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
-                            reuseNode true
-                        }
-                    }
-                    environment {
-                        E2E_BASE_URL = 'https://spanish-cards.netlify.app'
-                    }
-                    steps {
-                        sh 'npx playwright test'
-                    }
+        stage('e2e - prod') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                    reuseNode true
                 }
+            }
+            environment {
+                E2E_BASE_URL = 'https://spanish-cards.netlify.app'
+            }
+            steps {
+                sh 'npx playwright test'
+            }
+        }
     }
 }
