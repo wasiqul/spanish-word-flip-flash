@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     options {
         ansiColor('xterm')
     }
@@ -19,14 +19,19 @@ pipeline {
         }
 
         stage('test') {
-            agent {
-                docker {
-                    image 'node:22-alpine'
-                    reuseNode true  // Reuses same workspace on host
+            parallel {
+                stage('unit tests') {
+                    agent {
+                        docker {
+                            image 'node:22-alpine'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        // Unit tests with Vitest
+                        sh 'npx vitest run --reporter=verbose'
+                    }
                 }
-            }
-            steps {
-                sh 'npx vitest run --reporter=verbose'
             }
         }
 
@@ -37,6 +42,7 @@ pipeline {
                 }
             }
             steps {
+                // Mock deployment which does nothing
                 echo 'Mock deployment was successful!'
             }
         }
