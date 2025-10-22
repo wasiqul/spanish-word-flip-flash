@@ -33,7 +33,7 @@ pipeline {
                         sh 'npx vitest run --reporter=verbose'
                     }
                 }
-                stage('e2e - local') {
+                stage('e2e Local') {
                     agent {
                         docker {
                             image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
@@ -59,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('e2e - prod') {
+        stage('e2e Prod') {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
